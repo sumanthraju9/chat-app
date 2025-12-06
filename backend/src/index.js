@@ -21,7 +21,6 @@ cloudinary.config({
 const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
-
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -34,23 +33,31 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-
 if (process.env.NODE_ENV === "production") {
+  console.log(">>> NODE_ENV:", process.env.NODE_ENV);
+  console.log(">>> __dirname:", __dirname);
 
-  const frontendPath = path.join(__dirname, "../../frontend/dist");
+  const path1 = path.join(__dirname, "../../frontend/dist");
+  const path2 = path.join(__dirname, "../frontend/dist");
+  const path3 = path.join(__dirname, "../../../frontend/dist");
 
-  console.log("Serving frontend from:", frontendPath);
+  console.log(">>> FRONTEND PATH TRY 1:", path1);
+  console.log(">>> FRONTEND PATH TRY 2:", path2);
+  console.log(">>> FRONTEND PATH TRY 3:", path3);
 
- 
+
+  let frontendPath = path1;
+
+
   app.use(express.static(frontendPath));
 
+ 
   app.get("*", (req, res) => {
     res.sendFile(path.join(frontendPath, "index.html"));
   });
 }
 
-
 server.listen(PORT, () => {
-  console.log("server is running on PORT:" + PORT);
+  console.log("server is running on PORT:", PORT);
   connectDB();
 });
