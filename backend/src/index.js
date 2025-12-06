@@ -11,14 +11,13 @@ import { app, server } from "./lib/socket.js";
 
 dotenv.config();
 
-
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 const __dirname = path.resolve();
 
 app.use(express.json());
@@ -34,24 +33,13 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  console.log(">>> NODE_ENV:", process.env.NODE_ENV);
-  console.log(">>> __dirname:", __dirname);
 
-  const path1 = path.join(__dirname, "../../frontend/dist");
-  const path2 = path.join(__dirname, "../frontend/dist");
-  const path3 = path.join(__dirname, "../../../frontend/dist");
+  const frontendPath = path.join(__dirname, "../frontend/dist");
 
-  console.log(">>> FRONTEND PATH TRY 1:", path1);
-  console.log(">>> FRONTEND PATH TRY 2:", path2);
-  console.log(">>> FRONTEND PATH TRY 3:", path3);
-
-
-  let frontendPath = path1;
-
+  console.log(">>> USING FRONTEND PATH:", frontendPath);
 
   app.use(express.static(frontendPath));
 
- 
   app.get("*", (req, res) => {
     res.sendFile(path.join(frontendPath, "index.html"));
   });
